@@ -1,5 +1,8 @@
-﻿using System.Collections;
-namespace passwordGenerator // Note: actual namespace depends on the project name.
+﻿//Lance Rogan
+//This is a simple program in C# to generate a random password for a user
+//Note: This program / comments are very similar to my java version of the password generator
+using System.Collections;
+namespace passwordGenerator
 {
     internal class Program
     {
@@ -56,27 +59,64 @@ namespace passwordGenerator // Note: actual namespace depends on the project nam
 
             }
 
-          
-            int m =password.Count;
+
+
+
+            //initialize variables m to be size of arraylist, n=0
+            int m = password.Count;
+            int n = 0;
+            //inititalize boolean array to keep track of which index's are full
+            Boolean[] track = new Boolean[password.Count];
+            Boolean validity = false;
+            int count = 0; //counter for index
+            //new array list with the shuffled password
             ArrayList passwordShuffled = new ArrayList();
-            int n = randomSelection.Next(0) + m;
-            int prev = randomSelection.Next(0) + m;
-            char j = (char)password[0];
-            passwordShuffled.Insert(j,n);
-            // print out the password to the user
-            foreach (char i in password){
-                 n = randomSelection.Next(0) + m;
-                prev = randomSelection.Next(0) + m;
-                if(prev == n){
-                   n = randomSelection.Next(0) + m; 
-                }else{
-                passwordShuffled.Insert(i,n);
+
+            //loop trhough each char in password and shuffle it and add it into passwordShuffled
+            foreach (char i in password)
+            {
+                //generates number between 0 and array list size
+                n = randomSelection.Next(0, m);
+                //reset validity to false
+                validity = false;
+                //we continue to generate a new number until we add it in a open slot
+                while (!validity)
+                {
+                    //if the boolean array at index n is false, aka not taken, we add the element at this position and set to true
+                    if (track[n] == false)
+                    {
+                        //set index to true noting we added here already
+                        track[n] = true;
+                        //insert at counter index the password element at index n
+                        passwordShuffled.Insert(count, password[n]);
+                        //increment counter, setr validity to true, and break
+                        validity = true;
+                        count++;
+                        break;
+
+                        //otherwise, we generate another number and repeatedly check again
+                    }
+                    else
+                    {
+                        n = randomSelection.Next(0, m);
+                    }
+
+
+
                 }
-
             }
+            //some code to test the shuffling works
+            // Console.WriteLine("Password before shuffle: ");
+            //             foreach (char i in password)
+            //             {
+            //                 Console.Write(i);
+            //             }
+            // Console.WriteLine("Password after shuffle: ");
 
-        foreach (char i in passwordShuffled){
-                Console.WriteLine(i);
+            // prints out shuffled password to user
+            foreach (char i in passwordShuffled)
+            {
+                Console.Write(i);
             }
 
         }
